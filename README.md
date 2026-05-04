@@ -4,21 +4,28 @@
 
 ## Problem
 
-Financial institutions manage large volumes of unstructured documents, including loan applications, marketing materials, and regulatory updates.
+Financial institutions produce hundreds of documents every day. Most of them are never reviewed for regulatory compliance before they reach a customer.
+ 
+Consider a marketing manager at a regional bank. She is preparing a social media campaign advertising a new savings account. The copy reads "Free Account, Zero Fees." A $10 monthly maintenance fee applies if the balance drops below $500. She does not know this language violates Regulation DD. The ad goes live. The bank is now exposed.
+ 
+Or consider a loan officer processing 40 applications a week. Each application contains the applicant's Social Security Number, income details, and marital status. The files are shared over internal email, attached as PDFs with no access controls. A junior analyst opens the wrong file. That data is now visible to someone who should not have seen it.
 
-Manual compliance review is slow, expensive, and hard to audit. Traditional RAG systems lack the judgment needed to detect subtle regulatory violations.
-
-There is a need for a system that can reason against regulatory benchmarks and produce a verifiable audit trail.
-
+These are not edge cases. They happen regularly in institutions that rely on manual review, outdated templates, and tribal knowledge of the law.
+ 
+The problem is not a lack of effort. It is a lack of a system that can read a document, understand the regulatory context, and flag what is wrong before it causes harm.
 ---
 
 ## Solution
 
-Guardian-RAG is an automated governance framework built on a multi-agent architecture.
+Guardian-RAG is an automated compliance framework built on a multi-agent architecture.
+ 
+When a document is uploaded, a Researcher Agent reads the content and retrieves the specific regulatory clauses that apply to it. A second agent, the Auditor, then reads both the document and the retrieved law side by side. It looks for gaps, missing disclosures, illegal requirements, and prohibited language.
+ 
+Going back to the marketing manager's scenario, she uploads her ad copy before publishing. The system retrieves the relevant Regulation DD clause on fee disclosure. The Auditor flags the word "Free" as misleading given the undisclosed maintenance fee. She gets a clear violation report in under 30 seconds, with the exact regulation cited.
+ 
+The loan officer uploads a batch of application forms. The system detects that marital status is listed as a required field on an unsecured credit application. It flags this as a Regulation B violation and logs the finding with the source clause attached.
 
-One agent identifies relevant regulations. A second agent acts as an auditor, cross-referencing bank documents against retrieved legal text to find gaps or violations.
-
-Every decision is grounded in specific regulatory clauses, not general model knowledge. All reasoning steps are logged for full auditability.
+Every decision made by the system is grounded in retrieved legal text, not general model knowledge. Every finding is saved to a permanent audit log, so compliance teams can show exactly why a document was flagged and what regulation it was checked against.
 
 ---
 
