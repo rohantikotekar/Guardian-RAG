@@ -13,6 +13,7 @@ Or consider a loan officer processing 40 applications a week. Each application c
 These are not edge cases. They happen regularly in institutions that rely on manual review, outdated templates, and tribal knowledge of the law.
  
 The problem is not a lack of effort. It is a lack of a system that can read a document, understand the regulatory context, and flag what is wrong before it causes harm.
+
 ---
 
 ## Solution
