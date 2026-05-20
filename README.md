@@ -1,5 +1,5 @@
 # 🛡️ Guardian-RAG
-### Contextual Forensics for fraudulant credit card transactions
+### Contextual Fraud Forensics & Confidence Gating Engine
 
 > An automated, multi-agent credit card fraud investigation framework that combines hybrid semantic search with explainable AI reasoning — and enforces strict mathematical confidence gating before any banking action is taken.
 
@@ -13,6 +13,7 @@
 - [Confidence Gating Matrix](#-confidence-gating-matrix)
 - [Validation Scenarios](#-validation-scenarios)
 - [Getting Started](#-getting-started)
+- [Updating Fraud Typologies / Laws](#-updating-fraud-typologies--laws)
 - [Technical Stack & Design Rationale](#-technical-stack--design-rationale)
 - [Infrastructure & Cost Model](#-infrastructure--cost-model)
 
@@ -42,18 +43,40 @@ Guardian-RAG transforms credit card fraud analysis into an **automated, multi-ag
 ## 🏗️ System Architecture
 
 The platform runs on an **event-driven, asynchronous dual-agent pipeline**:
-<img width="1110" height="500" alt="image" src="https://github.com/user-attachments/assets/788fc95d-1c03-4a54-9204-887fd76df21e" />
 
----
-
-## 🎬 Video Demo
-
-[▶️ Watch the Demo](https://drive.google.com/file/d/1vnAL1cLt8qhM6YxDsXO_PwprnOwKWJGH/view?usp=sharing)
-
-[☁️ Cloud Resources on Azure](https://drive.google.com/file/d/1LLdMXs8JsDhYfxX-SU6Jv9RQr-v_Kurm/view?usp=drive_link)
-
-
----
+```
+Transaction Payload
+       │
+       ▼
+┌─────────────────────┐
+│  Transaction Ingest │  ← Secure webhooks / file delivery pipelines
+└─────────┬───────────┘
+          │
+          ▼
+┌─────────────────────┐
+│  Researcher Agent   │  ← GPT-4o-mini: generates optimized semantic queries
+└─────────┬───────────┘
+          │
+          ▼
+┌─────────────────────┐
+│  Azure AI Search    │  ← Hybrid semantic + keyword search across risk typologies
+└─────────┬───────────┘
+          │
+          ▼
+┌─────────────────────┐
+│   Auditor Agent     │  ← GPT-4o: forensic critic, assigns status + confidence score
+└─────────┬───────────┘
+          │
+          ▼
+┌─────────────────────┐
+│  Confidence Gate    │  ← Mathematical routing logic (see matrix below)
+└─────────┬───────────┘
+          │
+          ▼
+┌─────────────────────┐
+│  Azure Cosmos DB    │  ← Immutable audit trail + SAR baseline
+└─────────────────────┘
+```
 
 | Component | Role |
 |---|---|
@@ -97,7 +120,7 @@ Device Signature: DeviceID: unrecognized_mac_44x; Browser: Chrome Headless (Linu
 Risk Profile: Avg. $45/transaction, primarily local grocery spend.
 ```
 
-**Expected Output:** `❌ FRAUDULENT/ SUSPICIOUS — Automated Card Block Activated`
+**Expected Output:** `❌ FRAUDULENT — Automated Card Block Activated`
 
 The system links the low-value test charge immediately followed by a high-value web transaction to documented **micro-transaction carding attack** typologies.
 
@@ -128,7 +151,7 @@ Despite the geographic distance from the home profile, upstream signals (verifie
 
 ```
 SECURITY ALERT SYSTEM LOG
-Cardholder: John doe | Card Status: Active
+Cardholder: Rohan Vijay Tikotekar | Card Status: Active
 
 Last Cleared Transaction:
 - 11:00 AM PDT | Target Store #2041, Sacramento, CA | $64.20
@@ -138,7 +161,7 @@ Incoming Authorization (22 minutes later):
 - Status: Held for Review
 ```
 
-**Expected Output:** `⚠️ SUSPICIOUS/FRAUDULENT — Escalated to Human Analyst`
+**Expected Output:** `⚠️ SUSPICIOUS — Escalated to Human Analyst`
 
 The impossible 22-minute travel window triggers a high-risk flag, but the absence of corroborating travel data or device context prevents an automated block. Score falls below the high-confidence block threshold, routing directly to a human analyst.
 
@@ -190,6 +213,48 @@ Navigate to the local Gradio URL and upload a transaction file or paste a transa
 
 ---
 
+## 📝 Updating Fraud Typologies / Laws
+
+The fraud rules and risk typologies that power the RAG search index are defined inside `setup_index.py`. To add, remove, or modify them:
+
+**1. Open `setup_index.py` and locate the typologies list:**
+
+```python
+documents = [
+    {
+        "id": "1",
+        "title": "Micro-Transaction Carding Attack",
+        "content": "Small test charges under $2 rapidly followed by large purchases indicate stolen card validation attempts..."
+    },
+    {
+        "id": "2",
+        "title": "Impossible Travel Fraud",
+        "content": "Transactions occurring across geographically impossible distances within a short time window..."
+    },
+    # Add your new typology here
+]
+```
+
+**2. Add, edit, or remove a typology entry:**
+
+```python
+{
+    "id": "5",                           # unique ID
+    "title": "New Fraud Pattern Name",   # short descriptive title
+    "content": "Detailed description of the fraud pattern, behavioral signals, and risk indicators the auditor agent should match against..."
+}
+```
+
+**3. Re-run the setup script to re-index and push updates to Azure AI Search:**
+
+```bash
+python setup_index.py
+```
+
+> This clears the existing index and re-uploads all typologies as fresh vector embeddings. The system will use the updated rules on the very next transaction processed.
+
+---
+
 ## 🔧 Technical Stack & Design Rationale
 
 | Technology | Role | Rationale |
@@ -207,13 +272,22 @@ Navigate to the local Gradio URL and upload a transaction file or paste a transa
 
 | Resource | Pricing Model | Estimated Cost |
 |---|---|---|
-| Azure AI Search (Basic Tier) | Flat monthly rate | ~$74.00 / month |
-| Azure OpenAI — GPT-4o-mini | Per token | $0.15 / 1M input tokens |
-| Azure OpenAI — GPT-4o | Per token | $2.50 / 1M input tokens |
-| Azure Cosmos DB (Serverless) | Per request unit | ~$0.25 / 1M RUs |
-| **Aggregate Baseline** | | **~$75.00 / month** |
+| Azure AI Search (Basic Tier) | Hourly reservation | ~$74.00 / month |
+| Azure OpenAI | Pay-as-you-go, per 1K tokens | < $0.05 / month (light testing) |
+| Azure Cosmos DB (Serverless) | Per million Request Units | ~$0.25 / month (light testing) |
+| **Total** | | **~$74.30 / month** |
 
-> Estimate reflects standard validation, staging, and supervisory review workloads.
+> This estimate covers a standard **development and testing environment**. Production workloads with higher document volumes will increase OpenAI and Cosmos DB costs proportionally.
+
+---
+
+## 🎬 Video Demo
+
+A full walkthrough of Guardian-RAG in action — including live transaction testing, confidence gating decisions, and the analyst dashboard.
+
+[▶️ Watch the Demo](https://drive.google.com/file/d/1vnAL1cLt8qhM6YxDsXO_PwprnOwKWJGH/view?usp=sharing)
+
+[☁️ Cloud Resources on Azure](https://drive.google.com/file/d/1LLdMXs8JsDhYfxX-SU6Jv9RQr-v_Kurm/view?usp=drive_link)
 
 ---
 
