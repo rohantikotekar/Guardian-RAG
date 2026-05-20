@@ -42,7 +42,7 @@ Guardian-RAG transforms credit card fraud analysis into an **automated, multi-ag
 ## 🏗️ System Architecture
 
 The platform runs on an **event-driven, asynchronous dual-agent pipeline**:
-<img width="1109" height="604" alt="image" src="https://github.com/user-attachments/assets/94e09fed-e2e5-473e-9dc1-1dcf33142199" />
+<img width="1110" height="500" alt="image" src="https://github.com/user-attachments/assets/788fc95d-1c03-4a54-9204-887fd76df21e" />
 
 
 | Component | Role |
