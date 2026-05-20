@@ -1,5 +1,5 @@
 # 🛡️ Guardian-RAG
-### Contextual Fraud Forensics & Confidence Gating Engine for Fraudulant Credit Card transactions
+### Contextual Forensics for fraudulant credit card transactions
 
 > An automated, multi-agent credit card fraud investigation framework that combines hybrid semantic search with explainable AI reasoning — and enforces strict mathematical confidence gating before any banking action is taken.
 
