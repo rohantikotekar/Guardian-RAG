@@ -48,7 +48,9 @@ The platform runs on an **event-driven, asynchronous dual-agent pipeline**:
 
 ## 🎬 Video Demo
 
-[![Watch the Demo](https://img.shields.io/badge/▶%20Watch%20Demo-Google%20Drive-4285F4?style=for-the-badge&logo=googledrive&logoColor=white)](https://drive.google.com/file/d/1vnAL1cLt8qhM6YxDsXO_PwprnOwKWJGH/view?usp=drive_link)
+[![Watch the Demo](https://drive.google.com/file/d/1vnAL1cLt8qhM6YxDsXO_PwprnOwKWJGH/view?usp=sharing)
+
+[![Cloud resources on Azure](https://drive.google.com/file/d/1LLdMXs8JsDhYfxX-SU6Jv9RQr-v_Kurm/view?usp=drive_link)
 
 ---
 
