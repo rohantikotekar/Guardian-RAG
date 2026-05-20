@@ -87,7 +87,7 @@ Device Signature: DeviceID: unrecognized_mac_44x; Browser: Chrome Headless (Linu
 Risk Profile: Avg. $45/transaction, primarily local grocery spend.
 ```
 
-**Expected Output:** `❌ FRAUDULENT — Automated Card Block Activated`
+**Expected Output:** `❌ FRAUDULENT/ SUSPICIOUS — Automated Card Block Activated`
 
 The system links the low-value test charge immediately followed by a high-value web transaction to documented **micro-transaction carding attack** typologies.
 
@@ -128,7 +128,7 @@ Incoming Authorization (22 minutes later):
 - Status: Held for Review
 ```
 
-**Expected Output:** `⚠️ SUSPICIOUS — Escalated to Human Analyst`
+**Expected Output:** `⚠️ SUSPICIOUS/FRAUDULENT — Escalated to Human Analyst`
 
 The impossible 22-minute travel window triggers a high-risk flag, but the absence of corroborating travel data or device context prevents an automated block. Score falls below the high-confidence block threshold, routing directly to a human analyst.
 
