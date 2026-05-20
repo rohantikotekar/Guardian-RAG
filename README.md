@@ -118,7 +118,7 @@ Despite the geographic distance from the home profile, upstream signals (verifie
 
 ```
 SECURITY ALERT SYSTEM LOG
-Cardholder: Rohan Vijay Tikotekar | Card Status: Active
+Cardholder: John doe | Card Status: Active
 
 Last Cleared Transaction:
 - 11:00 AM PDT | Target Store #2041, Sacramento, CA | $64.20
