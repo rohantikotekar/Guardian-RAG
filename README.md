@@ -44,6 +44,13 @@ Guardian-RAG transforms credit card fraud analysis into an **automated, multi-ag
 The platform runs on an **event-driven, asynchronous dual-agent pipeline**:
 <img width="1110" height="500" alt="image" src="https://github.com/user-attachments/assets/788fc95d-1c03-4a54-9204-887fd76df21e" />
 
+---
+
+## 🎬 Video Demo
+
+[![Watch the Demo](https://img.shields.io/badge/▶%20Watch%20Demo-Google%20Drive-4285F4?style=for-the-badge&logo=googledrive&logoColor=white)](https://drive.google.com/file/d/1vnAL1cLt8qhM6YxDsXO_PwprnOwKWJGH/view?usp=drive_link)
+
+---
 
 | Component | Role |
 |---|---|
