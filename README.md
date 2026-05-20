@@ -42,40 +42,8 @@ Guardian-RAG transforms credit card fraud analysis into an **automated, multi-ag
 ## 🏗️ System Architecture
 
 The platform runs on an **event-driven, asynchronous dual-agent pipeline**:
+<img width="1109" height="604" alt="image" src="https://github.com/user-attachments/assets/94e09fed-e2e5-473e-9dc1-1dcf33142199" />
 
-```
-Transaction Payload
-       │
-       ▼
-┌─────────────────────┐
-│  Transaction Ingest │  ← Secure webhooks / file delivery pipelines
-└─────────┬───────────┘
-          │
-          ▼
-┌─────────────────────┐
-│  Researcher Agent   │  ← GPT-4o-mini: generates optimized semantic queries
-└─────────┬───────────┘
-          │
-          ▼
-┌─────────────────────┐
-│  Azure AI Search    │  ← Hybrid semantic + keyword search across risk typologies
-└─────────┬───────────┘
-          │
-          ▼
-┌─────────────────────┐
-│   Auditor Agent     │  ← GPT-4o: forensic critic, assigns status + confidence score
-└─────────┬───────────┘
-          │
-          ▼
-┌─────────────────────┐
-│  Confidence Gate    │  ← Mathematical routing logic (see matrix below)
-└─────────┬───────────┘
-          │
-          ▼
-┌─────────────────────┐
-│  Azure Cosmos DB    │  ← Immutable audit trail + SAR baseline
-└─────────────────────┘
-```
 
 | Component | Role |
 |---|---|
