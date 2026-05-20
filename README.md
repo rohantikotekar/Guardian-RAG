@@ -1,5 +1,5 @@
 # 🛡️ Guardian-RAG
-### Contextual Fraud Forensics & Confidence Gating Engine
+### Contextual Forensics for fraudulant credit card transactions
 
 > An automated, multi-agent credit card fraud investigation framework that combines hybrid semantic search with explainable AI reasoning — and enforces strict mathematical confidence gating before any banking action is taken.
 
@@ -13,7 +13,6 @@
 - [Confidence Gating Matrix](#-confidence-gating-matrix)
 - [Validation Scenarios](#-validation-scenarios)
 - [Getting Started](#-getting-started)
-- [Updating Fraud Typologies / Laws](#-updating-fraud-typologies--laws)
 - [Technical Stack & Design Rationale](#-technical-stack--design-rationale)
 - [Infrastructure & Cost Model](#-infrastructure--cost-model)
 
@@ -43,40 +42,17 @@ Guardian-RAG transforms credit card fraud analysis into an **automated, multi-ag
 ## 🏗️ System Architecture
 
 The platform runs on an **event-driven, asynchronous dual-agent pipeline**:
+<img width="1110" height="500" alt="image" src="https://github.com/user-attachments/assets/788fc95d-1c03-4a54-9204-887fd76df21e" />
 
-```
-Transaction Payload
-       │
-       ▼
-┌─────────────────────┐
-│  Transaction Ingest │  ← Secure webhooks / file delivery pipelines
-└─────────┬───────────┘
-          │
-          ▼
-┌─────────────────────┐
-│  Researcher Agent   │  ← GPT-4o-mini: generates optimized semantic queries
-└─────────┬───────────┘
-          │
-          ▼
-┌─────────────────────┐
-│  Azure AI Search    │  ← Hybrid semantic + keyword search across risk typologies
-└─────────┬───────────┘
-          │
-          ▼
-┌─────────────────────┐
-│   Auditor Agent     │  ← GPT-4o: forensic critic, assigns status + confidence score
-└─────────┬───────────┘
-          │
-          ▼
-┌─────────────────────┐
-│  Confidence Gate    │  ← Mathematical routing logic (see matrix below)
-└─────────┬───────────┘
-          │
-          ▼
-┌─────────────────────┐
-│  Azure Cosmos DB    │  ← Immutable audit trail + SAR baseline
-└─────────────────────┘
-```
+---
+
+## 🎬 Video Demo
+
+[![Watch the Demo](https://drive.google.com/file/d/1vnAL1cLt8qhM6YxDsXO_PwprnOwKWJGH/view?usp=sharing)
+
+[![Cloud resources on Azure](https://drive.google.com/file/d/1LLdMXs8JsDhYfxX-SU6Jv9RQr-v_Kurm/view?usp=drive_link)
+
+---
 
 | Component | Role |
 |---|---|
@@ -120,7 +96,7 @@ Device Signature: DeviceID: unrecognized_mac_44x; Browser: Chrome Headless (Linu
 Risk Profile: Avg. $45/transaction, primarily local grocery spend.
 ```
 
-**Expected Output:** `❌ FRAUDULENT — Automated Card Block Activated`
+**Expected Output:** `❌ FRAUDULENT/ SUSPICIOUS — Automated Card Block Activated`
 
 The system links the low-value test charge immediately followed by a high-value web transaction to documented **micro-transaction carding attack** typologies.
 
@@ -151,7 +127,7 @@ Despite the geographic distance from the home profile, upstream signals (verifie
 
 ```
 SECURITY ALERT SYSTEM LOG
-Cardholder: Rohan Vijay Tikotekar | Card Status: Active
+Cardholder: John doe | Card Status: Active
 
 Last Cleared Transaction:
 - 11:00 AM PDT | Target Store #2041, Sacramento, CA | $64.20
@@ -161,7 +137,7 @@ Incoming Authorization (22 minutes later):
 - Status: Held for Review
 ```
 
-**Expected Output:** `⚠️ SUSPICIOUS — Escalated to Human Analyst`
+**Expected Output:** `⚠️ SUSPICIOUS/FRAUDULENT — Escalated to Human Analyst`
 
 The impossible 22-minute travel window triggers a high-risk flag, but the absence of corroborating travel data or device context prevents an automated block. Score falls below the high-confidence block threshold, routing directly to a human analyst.
 
@@ -272,22 +248,13 @@ python setup_index.py
 
 | Resource | Pricing Model | Estimated Cost |
 |---|---|---|
-| Azure AI Search (Basic Tier) | Hourly reservation | ~$74.00 / month |
-| Azure OpenAI | Pay-as-you-go, per 1K tokens | < $0.05 / month (light testing) |
-| Azure Cosmos DB (Serverless) | Per million Request Units | ~$0.25 / month (light testing) |
-| **Total** | | **~$74.30 / month** |
+| Azure AI Search (Basic Tier) | Flat monthly rate | ~$74.00 / month |
+| Azure OpenAI — GPT-4o-mini | Per token | $0.15 / 1M input tokens |
+| Azure OpenAI — GPT-4o | Per token | $2.50 / 1M input tokens |
+| Azure Cosmos DB (Serverless) | Per request unit | ~$0.25 / 1M RUs |
+| **Aggregate Baseline** | | **~$75.00 / month** |
 
-> This estimate covers a standard **development and testing environment**. Production workloads with higher document volumes will increase OpenAI and Cosmos DB costs proportionally.
-
----
-
-## 🎬 Video Demo
-
-A full walkthrough of Guardian-RAG in action — including live transaction testing, confidence gating decisions, and the analyst dashboard.
-
-[▶️ Watch the Demo](https://drive.google.com/file/d/1vnAL1cLt8qhM6YxDsXO_PwprnOwKWJGH/view?usp=sharing)
-
-[☁️ Cloud Resources on Azure](https://drive.google.com/file/d/1LLdMXs8JsDhYfxX-SU6Jv9RQr-v_Kurm/view?usp=drive_link)
+> Estimate reflects standard validation, staging, and supervisory review workloads.
 
 ---
 
