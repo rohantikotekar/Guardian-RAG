@@ -1,5 +1,5 @@
 # 🛡️ Guardian-RAG
-### Contextual Forensics for fraudulant credit card transactions
+### Automated Financial Compliance Auditing Agent
 
 > An automated, multi-agent credit card fraud investigation framework that combines hybrid semantic search with explainable AI reasoning — and enforces strict mathematical confidence gating before any banking action is taken.
 
